@@ -61,6 +61,15 @@ G= [ 1 2
  20 21];
 
 g= graph(G(:,1),G(:,2));
-c= [100 60]; % change %
+plot(g);
+c= [12 8];
 n= length(G(:,1)); % verify %
 v= length(c); % verify %
+
+fid = fopen('exemplo.lp', 'wt');
+
+for i=1:n
+    
+end
+
+fprintf(fid, ' + %f x%d', )
