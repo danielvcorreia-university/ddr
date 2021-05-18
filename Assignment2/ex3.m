@@ -60,16 +60,55 @@ G= [ 1 2
  15 40
  20 21];
 
-g= graph(G(:,1),G(:,2));
-plot(g);
-c= [12 8];
-n= length(G(:,1)); % verify %
-v= length(c); % verify %
+%% 3.a
 
-fid = fopen('exemplo.lp', 'wt');
+s = G(:,1);
+t = G(:,2);
+grafo = graph(s,t);
+ids = 1:40;
+Ish = [];
 
-for i=1:n
+plot(grafo)
+
+fid = fopen('exemplo1.lp','wt');
+fprintf(fid, "Minimize\n");
+for i=6:40
+    if i<=15
+        fprintf(fid, ' + 12 x%d',i);
+    else
+        fprintf(fid, ' + 8 x%d',i);
+    end
+end
+       
+fprintf(fid,'\nSubject to \n');
+for j = 6:40
+    for i= 6:40
+        p = shortestpath(grafo,j,i);
+        if length(p)<=3
+            fprintf(fid, ' + x%d',i);
+        end
+    end
+    fprintf(fid,' >= 1\n');
+end
+
+fprintf(fid,'Binary\n');
+for i=6:40
+    
+    fprintf(fid, ' x%d',i);
     
 end
 
-fprintf(fid, ' + %f x%d', )
+fprintf(fid,'\nEnd\n');
+fclose(fid);
+
+%% 3.b
+
+
+
+
+        
+        
+
+            
+      
+
