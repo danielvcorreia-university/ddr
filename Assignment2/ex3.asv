@@ -103,22 +103,22 @@ fclose(fid);
 
 %% 3.b
 
-R = 50000; % variable %
+R = 10000; % variable %
 lambda = (10*5000+25*2500)/24;
 p = 30;
-n = 76; % variable %
+n = 70; % variable %
 N = 10;
 S = 1000;
-W = 52000; % variable %
+W = 175; % variable %
 fname = 'movies.txt';
 
 blocking = zeros(1, length(lambda));
 blocking_errhigh = zeros(1, length(lambda));
 blocking_errlow = zeros(1, length(lambda));
 
-blocking_HD = zeros(1, length(lambda));
-blocking_HD_errhigh = zeros(1, length(lambda));
-blocking_HD_errlow = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
+occupation_errhigh = zeros(1, length(lambda));
+occupation_errlow = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for j = 1:N
@@ -131,9 +131,9 @@ for i = 1:length(lambda)
     blocking_errhigh(i) = norminv(1-alfa/2) * sqrt(var(b)/N);
     blocking_errlow(i) = blocking_errhigh(i);
     
-    blocking_HD(i) = mean(o);
-    blocking_HD_errhigh(i) = norminv(1-alfa/2) * sqrt(var(o)/N);
-    blocking_HD_errlow(i) = blocking_errhigh(i);
+    occupation(i) = mean(o);
+    occupation_errhigh(i) = norminv(1-alfa/2) * sqrt(var(o)/N);
+    occupation_errlow(i) = blocking_errhigh(i);
 end
 
 figure(1)
@@ -151,18 +151,15 @@ er.LineStyle = 'none';
 hold off
 
 figure(2)
-bar(lambda, blocking_HD);
+bar(lambda, occupation);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 20]);
 grid on
 
 hold on
 
-er = errorbar(lambda, blocking_HD, blocking_HD_errlow, blocking_HD_errhigh);
+er = errorbar(lambda, occupation, occupation_errlow, occupation_errhigh);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 
 hold off
-
-fprintf('Blocking probability 4k(%%)= %.2e +-%.2e\n', blocking, blocking_errhigh)
-fprintf('Blocking probability HD(%%)= %.2e +-%.2e\n', blocking_HD, blocking_HD_errhigh)

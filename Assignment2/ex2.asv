@@ -14,9 +14,9 @@ blocking = zeros(1, length(lambda));
 blocking_errhigh = zeros(1, length(lambda));
 blocking_errlow = zeros(1, length(lambda));
 
-blocking_HD = zeros(1, length(lambda));
-blocking_HD_errhigh = zeros(1, length(lambda));
-blocking_HD_errlow = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
+occupation_errhigh = zeros(1, length(lambda));
+occupation_errlow = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for j = 1:N
@@ -29,9 +29,9 @@ for i = 1:length(lambda)
     blocking_errhigh(i) = norminv(1-alfa/2) * sqrt(var(b)/N);
     blocking_errlow(i) = blocking_errhigh(i);
     
-    blocking_HD(i) = mean(o);
-    blocking_HD_errhigh(i) = norminv(1-alfa/2) * sqrt(var(o)/N);
-    blocking_HD_errlow(i) = blocking_errhigh(i);
+    occupation(i) = mean(o);
+    occupation_errhigh(i) = norminv(1-alfa/2) * sqrt(var(o)/N);
+    occupation_errlow(i) = blocking_errhigh(i);
 end
 
 figure(1)
@@ -48,14 +48,14 @@ er.LineStyle = 'none';
 hold off
 
 figure(2)
-bar(lambda, blocking_HD);
+bar(lambda, occupation);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 100]);
 grid on
 
 hold on
 
-er = errorbar(lambda, blocking_HD, blocking_HD_errlow, blocking_HD_errhigh);
+er = errorbar(lambda, occupation, occupation_errlow, occupation_errhigh);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 
@@ -74,13 +74,13 @@ W = 0;
 fname = 'movies.txt';
 
 blocking = zeros(1, length(lambda));
-blocking_HD = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
 
 blocking2 = zeros(1, length(lambda));
-blocking_HD2 = zeros(1, length(lambda));
+occupation2 = zeros(1, length(lambda));
 
 blocking3 = zeros(1, length(lambda));
-blocking_HD3 = zeros(1, length(lambda));
+occupation3 = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for l = 1:3
@@ -90,13 +90,13 @@ for i = 1:length(lambda)
 
         if l == 1                      
             blocking(i) = mean(b);
-            blocking_HD(i) = mean(o);
+            occupation(i) = mean(o);
         elseif l == 2                       
             blocking2(i) = mean(b);
-            blocking_HD2(i) = mean(o);
+            occupation2(i) = mean(o);
         elseif l == 3                     
             blocking3(i) = mean(b);
-            blocking_HD3(i) = mean(o);
+            occupation3(i) = mean(o);
         end
     end
 end
@@ -108,7 +108,7 @@ grid on
 legend("Configuration 1 - 10 servers, 100 Mbps", "Configuration 2 - 4 servers, 250 Mbps", "Configuration 3 - 1 server, 1000 Mbps", 'Location', 'southeast');
 
 figure(2)
-bar(lambda, [blocking_HD;blocking_HD2;blocking_HD3]);
+bar(lambda, [occupation;occupation2;occupation3]);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 100]);
 grid on
@@ -127,13 +127,13 @@ W = 400;
 fname = 'movies.txt';
 
 blocking = zeros(1, length(lambda));
-blocking_HD = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
 
 blocking2 = zeros(1, length(lambda));
-blocking_HD2 = zeros(1, length(lambda));
+occupation2 = zeros(1, length(lambda));
 
 blocking3 = zeros(1, length(lambda));
-blocking_HD3 = zeros(1, length(lambda));
+occupation3 = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for l = 1:3
@@ -143,13 +143,13 @@ for i = 1:length(lambda)
 
         if l == 1                      
             blocking(i) = mean(b);
-            blocking_HD(i) = mean(o);
+            occupation(i) = mean(o);
         elseif l == 2                       
             blocking2(i) = mean(b);
-            blocking_HD2(i) = mean(o);
+            occupation2(i) = mean(o);
         elseif l == 3                     
             blocking3(i) = mean(b);
-            blocking_HD3(i) = mean(o);
+            occupation3(i) = mean(o);
         end
     end
 end
@@ -161,7 +161,7 @@ grid on
 legend("Configuration 1 - 10 servers, 100 Mbps", "Configuration 2 - 4 servers, 250 Mbps", "Configuration 3 - 1 server, 1000 Mbps", 'Location', 'southeast');
 
 figure(2)
-bar(lambda, [blocking_HD;blocking_HD2;blocking_HD3]);
+bar(lambda, [occupation;occupation2;occupation3]);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 100]);
 grid on
@@ -180,13 +180,13 @@ W = 600;
 fname = 'movies.txt';
 
 blocking = zeros(1, length(lambda));
-blocking_HD = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
 
 blocking2 = zeros(1, length(lambda));
-blocking_HD2 = zeros(1, length(lambda));
+occupation2 = zeros(1, length(lambda));
 
 blocking3 = zeros(1, length(lambda));
-blocking_HD3 = zeros(1, length(lambda));
+occupation3 = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for l = 1:3
@@ -196,13 +196,13 @@ for i = 1:length(lambda)
 
         if l == 1                      
             blocking(i) = mean(b);
-            blocking_HD(i) = mean(o);
+            occupation(i) = mean(o);
         elseif l == 2                       
             blocking2(i) = mean(b);
-            blocking_HD2(i) = mean(o);
+            occupation2(i) = mean(o);
         elseif l == 3                     
             blocking3(i) = mean(b);
-            blocking_HD3(i) = mean(o);
+            occupation3(i) = mean(o);
         end
     end
 end
@@ -214,7 +214,7 @@ grid on
 legend("Configuration 1 - 10 servers, 100 Mbps", "Configuration 2 - 4 servers, 250 Mbps", "Configuration 3 - 1 server, 1000 Mbps", 'Location', 'southeast');
 
 figure(2)
-bar(lambda, [blocking_HD;blocking_HD2;blocking_HD3]);
+bar(lambda, [occupation;occupation2;occupation3]);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 100]);
 grid on
@@ -232,10 +232,10 @@ W = 36000; % variable %
 fname = 'movies.txt';
 
 blocking = zeros(1, length(lambda));
-blocking_HD = zeros(1, length(lambda));
+occupation = zeros(1, length(lambda));
 
 blocking2 = zeros(1, length(lambda));
-blocking_HD2 = zeros(1, length(lambda));
+occupation2 = zeros(1, length(lambda));
 
 for i = 1:length(lambda)
     for l = 1:2
@@ -245,10 +245,10 @@ for i = 1:length(lambda)
 
         if l == 1                      
             blocking(i) = mean(b);
-            blocking_HD(i) = mean(o);
+            occupation(i) = mean(o);
         elseif l == 2                       
             blocking2(i) = mean(b);
-            blocking_HD2(i) = mean(o);
+            occupation2(i) = mean(o);
         end
     end
 end
@@ -261,13 +261,11 @@ grid on
 legend("7 servers, 10000 Mbps", "6 server, 10000 Mbps", 'Location', 'northwest');
 
 figure(2)
-bar(lambda, [blocking_HD;blocking_HD2]);
+bar(lambda, [occupation;occupation2]);
 title('Blocking Probabilities of HD Movies');
 ylim([0, 2]);
 grid on
 legend("7 servers, 10000 Mbps", "6 server, 10000 Mbps", 'Location', 'northwest');
 
-fprintf('Blocking probability 4k(%%) (7 servers)= %.2e \n', blocking);
-fprintf('Blocking probability HD(%%) (6 servers)= %.2e \n', blocking_HD);
-fprintf('Blocking probability 4k(%%) (6 servers)= %.2e \n', blocking2);
-fprintf('Blocking probability HD(%%) (6 servers)= %.2e \n', blocking_HD2);
+fprintf('Blocking probability 4k(%%)= %.2e +-%.2e\n', blocking, term)
+fprintf('Average occupation (Mbps)= %.2e +-%.2e\n', occupation, term1)
