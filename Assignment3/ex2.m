@@ -121,17 +121,17 @@ pl= pl * 100;
 averagePacketTrans= 0;
 averageSquarePackTrans= 0;
 for i = 1:length(packetsSize)
-    temp= 8 * packetsSize(i) / C;
+    temp= 8 * packetsSize(i) / (C*1e6);
     averagePacketTrans= averagePacketTrans + probPacketsSize(i) * temp;
     averageSquarePackTrans= averageSquarePackTrans + probPacketsSize(i) * temp^2;
 end
 
-averageQueueDelay= (lambda * averageSquarePackTrans) / (2 * (1-lambda*averagePacketTrans));
+averageQueueDelay= lambda * averageSquarePackTrans / (2 * (1-lambda*averagePacketTrans));
 
 term1= 0;
 term2= 0;
 for i = 1:length(packetsSize)
-    averagePacketDelay(i)= averageQueueDelay + 8 * packetsSize(i) / C;
+    averagePacketDelay(i)= averageQueueDelay + 8 * packetsSize(i) / (C*1e6);
     temp= probPacketsSize(i) * probPacketsWithoutErrors(i);
     term1= term1 + (temp * averagePacketDelay(i));
     term2= term2 + temp;
@@ -144,6 +144,72 @@ for i = 1:length(packetsSize)
     tt= tt + (probPacketsSize(i) * probPacketsWithoutErrors(i) * lambda * (8*packetsSize(i)));
 end
 
-fprintf('Packet Lost (%%)           = %.4d\n', pl)
-fprintf('Av. Packet Delay (ms)     = %.4d\n', apd)  % Mal acho eu
-fprintf('Throughput (Mbps)         = %4d\n', tt)    % Bem acho eu, mas dá diferente
+fprintf('Packet Lost (%%)           = %.4f\n', pl)
+fprintf('Av. Packet Delay (ms)     = %.4f\n', apd * 1000)
+fprintf('Throughput (Mbps)         = %4f\n', tt / 1e6)
+
+%% 2.d
+
+P= 10000;
+lambda= 1800;
+C= 10;
+f= 1000000;
+b= 10^-5;
+
+otherProbabilities= (1-0.16-0.25-0.2)/1452;
+packetsSize= (64:1518);
+probPacketsSize= zeros(1, length(packetsSize));
+averagePacketDelay= zeros(1, length(packetsSize));
+probPacketsWithoutErrors= zeros(1, length(packetsSize));
+
+for i = 1:length(packetsSize)
+    if i == 1
+        probPacketsSize(i)= 0.16;
+    elseif i == 47
+        probPacketsSize(i)= 0.25;
+    elseif i == 1455
+        probPacketsSize(i)= 0.2;
+    else
+        probPacketsSize(i)= otherProbabilities;
+    end
+    
+    probPacketsWithoutErrors(i)= (1-b)^(8*packetsSize(i));
+end
+
+% Packet Loss (PL)
+pl= 0;
+for i = 1:length(packetsSize)
+    pl= pl + probPacketsSize(i) * (1-probPacketsWithoutErrors(i));
+end
+pl= pl * 100;
+
+% Average Packet Delay (APD)
+averagePacketTrans= 0;
+averageSquarePackTrans= 0;
+for i = 1:length(packetsSize)
+    temp= 8 * packetsSize(i) / (C*1e6);
+    averagePacketTrans= averagePacketTrans + probPacketsSize(i) * temp;
+    averageSquarePackTrans= averageSquarePackTrans + probPacketsSize(i) * temp^2;
+end
+
+averageQueueDelay= lambda * averageSquarePackTrans / (2 * (1-lambda*averagePacketTrans));
+
+term1= 0;
+term2= 0;
+for i = 1:length(packetsSize)
+    averagePacketDelay(i)= averageQueueDelay + 8 * packetsSize(i) / (C*1e6);
+    temp= probPacketsSize(i) * probPacketsWithoutErrors(i);
+    term1= term1 + (temp * averagePacketDelay(i));
+    term2= term2 + temp;
+end
+apd= term1 / term2;
+
+% Total Throughput (TT)
+tt= 0;
+for i = 1:length(packetsSize)
+    tt= tt + (probPacketsSize(i) * probPacketsWithoutErrors(i) * lambda * (8*packetsSize(i)));
+end
+
+fprintf('Packet Lost (%%)           = %.4f\n', pl)
+fprintf('Av. Packet Delay (ms)     = %.4f\n', apd * 1000)
+fprintf('Throughput (Mbps)         = %4f\n', tt / 1e6)
